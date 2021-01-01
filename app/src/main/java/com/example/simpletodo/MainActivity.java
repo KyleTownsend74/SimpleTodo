@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 
@@ -25,9 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String KEY_ITEM_TEXT = "item_text";
     public static final String KEY_ITEM_POSITION = "item_position";
+    public static final String KEY_ITEM_DATE = "item_date";
+    public static final String KEY_ITEM_MONTH = "item_month";
+    public static final String KEY_ITEM_DAY = "item_day";
+    public static final String KEY_ITEM_YEAR = "item_year";
     public static final int EDIT_TEXT_CODE = 20;
 
-    List<String> items;
+    List<ListItem> items;
 
     Button btnAdd;
     EditText etItem;
@@ -64,8 +71,12 @@ public class MainActivity extends AppCompatActivity {
                 // create the new activity
                 Intent i = new Intent(MainActivity.this, EditActivity.class);
                 // pass the data being edited
-                i.putExtra(KEY_ITEM_TEXT, items.get(position));
+                i.putExtra(KEY_ITEM_TEXT, items.get(position).getText());
                 i.putExtra(KEY_ITEM_POSITION, position);
+                i.putExtra(KEY_ITEM_DATE, items.get(position).getUseDate());
+                i.putExtra(KEY_ITEM_MONTH, items.get(position).getMonth());
+                i.putExtra(KEY_ITEM_DAY, items.get(position).getDay());
+                i.putExtra(KEY_ITEM_YEAR, items.get(position).getYear());
                 // display the activity
                 startActivityForResult(i, EDIT_TEXT_CODE);
             }
@@ -77,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String todoItem = etItem.getText().toString();
+                String todoItemText = etItem.getText().toString();
+                ListItem todoItem = new ListItem(todoItemText);
                 // Add item to the model
                 items.add(todoItem);
                 // Notify adapter that an item is inserted
@@ -94,13 +106,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == EDIT_TEXT_CODE) {
-            // Retrieve the updated text value
+            // Retrieve the updated values
             String itemText = data.getStringExtra(KEY_ITEM_TEXT);
+            boolean itemUseDate = data.getBooleanExtra(KEY_ITEM_DATE, false);
+            String itemDateText = "";
+            String itemMonth = data.getStringExtra(KEY_ITEM_MONTH);
+            int itemDay = data.getIntExtra(KEY_ITEM_DAY, 1);
+            int itemYear = data.getIntExtra(KEY_ITEM_YEAR, 2021);
+
+            if(itemUseDate) {
+                itemDateText = itemMonth + " " + itemDay + ", " + itemYear;
+            }
+
+            ListItem newItem = new ListItem(itemText, itemUseDate, itemDateText, itemMonth, itemDay, itemYear);
+
             // extract the original position of the edited item from the position key
             int position = data.getExtras().getInt(KEY_ITEM_POSITION);
 
-            // update the model at the right position with the new item text
-            items.set(position, itemText);
+            // update the model at the right position with the new item
+            items.set(position, newItem);
             // notify the adapter
             itemsAdapter.notifyItemChanged(position);
             // persist the changes
@@ -117,10 +141,23 @@ public class MainActivity extends AppCompatActivity {
 
     // This function will load items by reading every line of the data file
     private void loadItems() {
+        items = new ArrayList<>();
+
         try {
-            items = new ArrayList<>(FileUtils.readLines(getDataFile(), Charset.defaultCharset()));
+            List<String> readItems = new ArrayList<>(FileUtils.readLines(getDataFile(), Charset.defaultCharset()));
+
+            for(int i = 0; i < readItems.size(); i++) {
+                Scanner scanner = new Scanner(readItems.get(i));
+                scanner.useDelimiter("~");
+                ListItem newItem = new ListItem(scanner.next(), Boolean.valueOf(scanner.next()), scanner.next(),
+                        scanner.next(), Integer.parseInt(scanner.next()), Integer.parseInt(scanner.next()));
+                items.add(newItem);
+            }
         } catch (IOException e) {
             Log.e("MainActivity", "Error reading items", e);
+            items = new ArrayList<>();
+        } catch(NumberFormatException e) {
+            Log.e("MainActivity", "Error loading items. Try deleting data.txt", e);
             items = new ArrayList<>();
         }
     }

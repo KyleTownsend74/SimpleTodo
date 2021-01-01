@@ -1,5 +1,7 @@
 package com.example.simpletodo;
 
+import android.content.ClipData;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +23,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         void onItemLongClicked(int position);
     }
 
-    List<String> items;
+    List<ListItem> items;
     OnLongClickListener longClickListener;
     OnClickListener clickListener;
 
-    public ItemsAdapter(List<String> items, OnLongClickListener longClickListener, OnClickListener clickListener) {
+    public ItemsAdapter(List<ListItem> items, OnLongClickListener longClickListener, OnClickListener clickListener) {
         this.items = items;
         this.longClickListener = longClickListener;
         this.clickListener = clickListener;
@@ -44,9 +46,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Grab the item at the position
-        String item = items.get(position);
+        ListItem item = items.get(position);
         // Bind the item into the specified view holder
-        holder.bind(item);
+        holder.bind(item.getText(), item.getDateText(), item.getUseDate());
     }
 
     // Tells the recycler view how many items are in the list
@@ -66,8 +68,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         }
 
         // Update the view inside of the view holder with this data
-        public void bind(String item) {
-            tvItem.setText(item);
+        public void bind(String itemText, String itemDateText, boolean itemUseDate) {
+            if(itemUseDate) {
+                tvItem.setText(Html.fromHtml(itemText + "<br><small><i>" + " Due: " + itemDateText + "</i></small>"));
+            }
+            else {
+                tvItem.setText(itemText);
+            }
+
             tvItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
