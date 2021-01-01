@@ -4,7 +4,7 @@
 
 Submitted by: **Kyle Townsend**
 
-Time spent: **5** hours spent in total
+Time spent: **17** hours spent in total
 
 ## User Stories
 
@@ -20,7 +20,10 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Improved UI of app
+* [ ] Improved style of todo items using a custom adapter
+* [x] Support for completion due dates for todo items (and display within recyclerview item)
+* [ ] Support for selecting the priority of each todo item (and display in recyclerview item)
 
 ## Video Walkthrough
 
