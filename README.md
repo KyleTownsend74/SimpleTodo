@@ -1,45 +1,28 @@
-# Project 1 - *Simple Todo*
+# Simple Todo
 
-**Simple Todo** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting an existing item.
+**Simple Todo** is an android app that allows the user to build a todo list and make use of basic todo list management functionality. Made to apply for the CodePath Android University course (Prework).
 
-Submitted by: **Kyle Townsend**
+## Features
 
-Time spent: **17** hours spent in total
+The following features have been implemented:
 
-## User Stories
-
-The following **required** functionality is completed:
-
-* [x] User can **view a list of todo items**
-* [x] User can **successfully add and remove items** from the todo list
-* [x] User's **list of items persisted** upon modification and and retrieved properly on app restart
-
-The following **optional** features are implemented:
-
-* [x] User can **tap a todo item in the list and bring up an edit screen for the todo item** and then have any changes to the text reflected in the todo list
-
-The following **additional** features are implemented:
-
-* [x] Improved UI of app
-* [ ] Improved style of todo items using a custom adapter
-* [x] Support for completion due dates for todo items (and display within recyclerview item)
-* [ ] Support for selecting the priority of each todo item (and display in recyclerview item)
+- User can **view a list of todo items**
+- User can **successfully add and remove items** from the todo list
+- User's **list of items persisted** upon modification and and retrieved properly on app restart
+- User can **tap a todo item in the list and bring up an edit screen for the todo item** and then have any changes to the text reflected in the todo list
+- Support for completion due dates for todo items (and displayed within recyclerview item)
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of some implemented features:
 
 <img src='walkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
-## Notes
-
-While building the app by following along with the video series, I ran into a few basic compiler errors. I fixed these errors by following the edits suggested in Android Studio itself.
-
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright 2020 Kyle Townsend
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
