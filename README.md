@@ -8,7 +8,7 @@ The following features have been implemented:
 
 - User can **view a list of todo items**
 - User can **successfully add and remove items** from the todo list
-- User's **list of items persisted** upon modification and and retrieved properly on app restart
+- User's **list of items is persisted** upon modification and and retrieved properly on app restart
 - User can **tap a todo item in the list and bring up an edit screen for the todo item** and then have any changes to the text reflected in the todo list
 - Support for completion due dates for todo items (and displayed within recyclerview item)
 
